@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # Nombre del servicio de la base de datos
+  postgre-db:
+    image: postgres:16-alpine # Imagen oficial, versión 16, y 'alpine' para ser ligera
+    container_name: postgres_db
+    restart: always # Asegura que se reinicie si falla o si se reinicia Docker
+    
+    environment:
+      # *** ¡IMPORTANTE! Cambia estos valores en un entorno real ***
+      POSTGRES_DB: SOA 
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      
+    ports:
+      # Puerto_Host:Puerto_Contenedor
+      # El host (tu PC) escuchará en el puerto 5432, redirigido al contenedor
+      - "5432:5432" 
+      
+    volumes:
+      # Persistencia de datos: Mapea la carpeta de datos del contenedor a una carpeta local
+      - ./db/data/postgres:/var/lib/postgresql/data

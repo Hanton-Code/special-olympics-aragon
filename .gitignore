@@ -1,0 +1,5 @@
+# Ignore database data directory contents
+db/data/*
+
+# Keep the directory structure but ignore all contents
+!db/data/.gitkeep
