@@ -1,0 +1,227 @@
+// Esquema basado en el diseño funcional del MVP
+// Nota: soft-delete con campo deletedAt en entidades maestras
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  active    Boolean  @default(true)
+  roles     UserRole[]
+  createdAt DateTime @default(now())
+}
+
+model Role {
+  id    String     @id @default(cuid())
+  name  String     @unique
+  users UserRole[]
+}
+
+model UserRole {
+  userId String
+  roleId String
+  user   User   @relation(fields: [userId], references: [id])
+  role   Role   @relation(fields: [roleId], references: [id])
+  @@id([userId, roleId])
+}
+
+model Persona {
+  id         String    @id @default(cuid())
+  type       PersonaType
+  firstName  String
+  lastName   String
+  nif        String?   @unique
+  birthDate  DateTime?
+  email      String?   @unique
+  phone      String?
+  address    String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  tutor      Tutor?
+  voluntario Voluntario?
+  tutorizado Tutorizado?
+  documentos Documento[]
+}
+
+enum PersonaType {
+  Tutor
+  Voluntario
+  Tutorizado
+}
+
+//TODO: Check if 'relaciones' field is really necessary
+model Tutor {
+  personaId String @id
+  persona   Persona @relation(fields: [personaId], references: [id])
+  relaciones RelTutorTutorizado[]
+  Tutorizado Tutorizado[] @relation("TutorResponsable")
+}
+
+model Voluntario {
+  personaId String @id
+  persona   Persona @relation(fields: [personaId], references: [id])
+}
+//TODO: Check if 'relaciones' field is really necessary
+model Tutorizado {
+  personaId           String  @id
+  persona             Persona @relation(fields: [personaId], references: [id])
+  specialNeeds        Json?
+  legalResponsibleId  String?
+  legalResponsible    Tutor?  @relation("TutorResponsable", fields: [legalResponsibleId], references: [personaId])
+  relaciones          RelTutorTutorizado[]
+}
+
+model RelTutorTutorizado {
+  id           String   @id @default(cuid())
+  tutorId      String
+  tutorizadoId String
+  since        DateTime @default(now())
+  until        DateTime?
+  tutor        Tutor     @relation(fields: [tutorId], references: [personaId])
+  tutorizado   Tutorizado @relation(fields: [tutorizadoId], references: [personaId])
+}
+
+model Documento {
+  id          String   @id @default(cuid())
+  personaId   String
+  type        String
+  fileName    String
+  hash        String
+  mime        String
+  size        Int
+  status      DocStatus @default(pending)
+  expiresAt   DateTime?
+  uploadedBy  String?
+  createdAt   DateTime  @default(now())
+  validatedBy String?
+  validatedAt DateTime?
+  note        String?
+  persona     Persona   @relation(fields: [personaId], references: [id])
+}
+
+enum DocStatus {
+  pending
+  validated
+  expired
+}
+
+model Temporada {
+  id      String   @id @default(cuid())
+  name    String
+  startAt DateTime
+  endAt   DateTime
+  active  Boolean  @default(false)
+  eventos Evento[]
+}
+
+model Evento {
+  id          String    @id @default(cuid())
+  title       String
+  type        String
+  capacity    Int
+  startAt     DateTime
+  endAt       DateTime
+  location    String
+  status      EventStatus @default(draft)
+  temporadaId String
+  temporada   Temporada  @relation(fields: [temporadaId], references: [id])
+  deletedAt   DateTime?
+  inscripciones Inscripcion[]
+  waitlist      Waitlist[]
+  reservas      ReservaMaterial[]
+}
+
+enum EventStatus {
+    draft
+    published
+    closed
+}
+
+model Inscripcion {
+  id              String   @id @default(cuid())
+  eventoId        String
+  participantType ParticipantType
+  participantId   String
+  status          InscripcionStatus @default(confirmed)
+  createdAt       DateTime @default(now())
+  evento          Evento   @relation(fields: [eventoId], references: [id])
+}
+
+enum ParticipantType {
+    Voluntario
+    Tutorizado
+}
+
+enum InscripcionStatus {
+    confirmed
+    waitlist
+    cancelled
+}
+
+model Waitlist {
+  id              String   @id @default(cuid())
+  eventoId        String
+  participantType ParticipantType
+  participantId   String
+  position        Int
+  createdAt       DateTime @default(now())
+  evento          Evento   @relation(fields: [eventoId], references: [id])
+}
+
+model Material {
+  id            String  @id @default(cuid())
+  sku           String  @unique
+  name          String
+  description   String?
+  totalStock    Int
+  reservedStock Int      @default(0)
+  alertThreshold Int     @default(0)
+  reservas      ReservaMaterial[]
+  movimientos   MovimientoInventario[]
+}
+
+model ReservaMaterial {
+  id         String  @id @default(cuid())
+  eventoId   String
+  materialId String
+  quantity   Int
+  evento     Evento   @relation(fields: [eventoId], references: [id])
+  material   Material @relation(fields: [materialId], references: [id])
+}
+
+model MovimientoInventario {
+  id         String @id @default(cuid())
+  materialId String
+  kind       MovimientoKind
+  quantity   Int
+  reason     String?
+  reference  String?
+  date       DateTime @default(now())
+  material   Material @relation(fields: [materialId], references: [id])
+}
+
+enum MovimientoKind {
+    in
+    out
+    adjust
+    missing
+}
+
+model Audit {
+  id        String   @id @default(cuid())
+  entity    String
+  entityId  String
+  action    String
+  userId    String?
+  timestamp DateTime @default(now())
+  detail    Json?
+}
