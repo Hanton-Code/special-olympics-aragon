@@ -1,5 +1,5 @@
-import { prisma } from '../libs/prisma';
-import { audit } from '../utils/audit';
+import { prisma } from '@libs/prisma';
+import { audit } from '@utils/audit';
 
 export async function listPersonas(filter: any, page: number, size: number) {
   const where: any = { deletedAt: null };

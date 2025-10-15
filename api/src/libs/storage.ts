@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { env } from '../config/env';
+import { env } from '@config/env';
 
 export function ensureUploadDir() {
   fs.mkdirSync(env.uploadDir, { recursive: true });

@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'node:path';
-import { env } from '../config/env';
-import { auth } from '../middlewares/auth';
-import { registerUpload, updateDocumento, validarDocumento } from '../domain/documentos.service';
-import { documentoUpdateSchema, validarDocSchema } from '../schemas/documentos';
-import { ensureUploadDir } from '../libs/storage';
+import { env } from '@config/env';
+import { auth } from '@middlewares/auth';
+import { registerUpload, updateDocumento, validarDocumento } from '@domain/documentos.service';
+import { documentoUpdateSchema, validarDocSchema } from '@schemas/documentos';
+import { ensureUploadDir } from '@libs/storage';
 
 ensureUploadDir();
 const upload = multer({

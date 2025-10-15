@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { auth } from '../middlewares/auth';
-import { requireRole } from '../middlewares/rbac';
-import { materialCreateSchema, movimientoCreateSchema } from '../schemas/inventario';
-import { createMaterial, movimientoInventario, reservarMaterial } from '../domain/inventario.service';
-import { prisma } from '../libs/prisma';
+import { auth } from '@middlewares/auth';
+import { requireRole } from '@middlewares/rbac';
+import { materialCreateSchema, movimientoCreateSchema } from '@schemas/inventario';
+import { createMaterial, movimientoInventario, reservarMaterial } from '@domain/inventario.service';
+import { prisma } from '@libs/prisma';
 
 export const inventarioRouter = Router();
 

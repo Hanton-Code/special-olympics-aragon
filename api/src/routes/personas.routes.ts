@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { auth } from '../middlewares/auth';
-import { requireRole } from '../middlewares/rbac';
-import { toPagination } from '../utils/pagination';
-import { personaCreateSchema } from '../schemas/personas';
-import { createPersona, listPersonas, softDeletePersona } from '../domain/personas.service';
+import { auth } from '@middlewares/auth';
+import { requireRole } from '@middlewares/rbac';
+import { toPagination } from '@utils/pagination';
+import { personaCreateSchema } from '@schemas/personas';
+import { createPersona, listPersonas, softDeletePersona } from '@domain/personas.service';
 
 export const personasRouter = Router();
 

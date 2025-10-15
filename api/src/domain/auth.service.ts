@@ -1,6 +1,6 @@
-import { prisma } from '../libs/prisma';
-import { hashPassword, verifyPassword } from '../utils/passwords';
-import { signJwt } from '../utils/jwt';
+import { prisma } from '@libs/prisma';
+import { hashPassword, verifyPassword } from '@utils/passwords';
+import { signJwt } from '@utils/jwt';
 
 export async function register(email: string, password: string, role: string) {
   const exists = await prisma.user.findUnique({ where: { email } });

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { auth } from '../middlewares/auth';
-import { inscribir, cancelarInscripcion, promoverWaitlist } from '../domain/inscripciones.service';
-import { prisma } from '../libs/prisma';
+import { auth } from '@middlewares/auth';
+import { inscribir, cancelarInscripcion, promoverWaitlist } from '@domain/inscripciones.service';
+import { prisma } from '@libs/prisma';
 
 export const inscripcionesRouter = Router();
 

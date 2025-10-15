@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { login, register } from '../domain/auth.service';
-import { loginSchema, registerSchema } from '../schemas/auth';
+import { login, register } from '@domain/auth.service';
+import { loginSchema, registerSchema } from '@schemas/auth';
 
 export const authRouter = Router();
 

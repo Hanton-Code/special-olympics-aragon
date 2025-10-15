@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { auth } from '../middlewares/auth';
-import { requireRole } from '../middlewares/rbac';
-import { temporadaCreateSchema, eventoCreateSchema } from '../schemas/eventos';
-import { createTemporada, createEvento, listEventos, softDeleteEvento, updateEvento } from '../domain/eventos.service';
+import { auth } from '@middlewares/auth';
+import { requireRole } from '@middlewares/rbac';
+import { temporadaCreateSchema, eventoCreateSchema } from '@schemas/eventos';
+import { createTemporada, createEvento, listEventos, softDeleteEvento, updateEvento } from '@domain/eventos.service';
 import { prisma } from 'src/libs/prisma';
 
 export const eventosRouter = Router();

@@ -1,4 +1,4 @@
-import { prisma } from '../libs/prisma';
+import { prisma } from '@libs/prisma';
 
 export async function createMaterial(data: any) {
   return prisma.material.create({ data });

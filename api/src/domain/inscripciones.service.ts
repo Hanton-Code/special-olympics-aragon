@@ -1,4 +1,4 @@
-import { prisma } from '../libs/prisma';
+import { prisma } from '@libs/prisma';
 
 async function participantDocsAreValid(participantType: 'Voluntario'|'Tutorizado', participantId: string) {
   // Regla base: debe existir al menos 1 documento validado no caducado

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
-import { prisma } from '../libs/prisma';
-import { computeSha256 } from '../libs/storage';
-import { audit } from '../utils/audit';
+import { prisma } from '@libs/prisma';
+import { computeSha256 } from '@libs/storage';
+import { audit } from '@utils/audit';
 
 export async function registerUpload(personaId: string, file: Express.Multer.File, userId?: string) {
   if (!file) throw Object.assign(new Error('File required'), { status: 400 });

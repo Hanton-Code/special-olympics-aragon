@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { env } from '../config/env';
+import { env } from '@config/env';
 
 export function signJwt(payload: object) {
     //TODO: Check expiration time not string
